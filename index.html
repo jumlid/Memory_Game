@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <audio id="audio" controls style="display: none;">
+
+    </audio>
+    <div class="container">
+
+        <div class="game">
+            <h1>Score:<span id="score">0</span> Highest:<span id="hscore">0</span></h1>
+            <div class="first">
+                <button class="opt" style="background-image: url(src/red.png);" id="1">red</button>
+                <button class="opt" style="background-image: url(src/lime.png);" id="2">lime</button>
+            </div>
+            <div class="second">
+                <button class="opt" style="background-image: url(src/cyan.png);" id="3">cyan</button>
+                <button class="opt" style="background-image: url(src/yellow.png);" id="4">yellow</button </div>
+
+
+            </div>
+
+        </div>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+
+            .container {
+                background-color: rgb(221, 216, 206);
+                text-align: center;
+                height: 100vh;
+                width: 100vw;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .game {
+
+                width: 600px;
+                height: 600px;
+                display: flex;
+                flex-direction: column;
+            }
+
+
+
+            .first {
+
+                height: 50%;
+                width: 100%;
+                display: flex;
+            }
+
+            button {
+                background-position: center;
+                background-size: contain;
+                font-weight: bold;
+            }
+
+            button:active {
+                background-image: url(src/white.png) !important;
+            }
+
+            .second {
+                display: flex;
+                height: 50%;
+            }
+
+            .game button {
+                border-radius: 5px;
+                border: none;
+                width: 50%;
+                cursor: pointer;
+            }
+        </style>
+
+</body>
+
+<script>
+    let a = document.getElementById('audio')
+    let temp = []
+    let move;
+    let point = 0
+    let store = false
+    let state = false
+    // let score = 4
+    let users_input = 0
+    function p(time, promise) {
+        return new Promise((res, rej) => {
+            setTimeout(() => {
+                if (!promise) {
+                    rej()
+
+                }
+                else {
+                    res()
+                }
+            }, time)
+
+        })
+        //    setTimeout(r, time)
+
+
+    }
+
+    document.addEventListener('click', (e) => {
+
+        a.src = `src/${e.target.id}.mp3`
+        a.play()
+
+        if (store && e.isTrusted) {
+
+
+            if (e.target.className === "opt") {
+
+                console.log(typeof (p))
+                console.log(typeof (e.target.id))
+
+
+                if (temp[users_input] === parseInt(e.target.id)) {
+                    console.log('yes')
+                    state = true
+
+                }
+                else {
+                    console.log("fuck")
+                    state = false
+                }
+
+
+
+                //   console.log('es')
+                users_input++
+                if (users_input >= temp.length && state) {
+                    users_input = 0
+                    // alert('next level')
+                    bot(point + 2)
+
+                }
+            }
+            else {
+                console.log('wadwada')
+            }
+
+        }
+    })
+    async function bot(score) {
+        await p(0, false);
+        for (let i = 0; i < score; i++) {
+            temp.push(Math.floor(Math.random() * 4 + 1))
+
+            console.log(temp)
+            //        const element = array[i];
+
+        }
+        if (temp.length === score) {
+            sound()
+
+        }
+    }
+
+
+
+
+    bot(point + 2)
+
+
+
+    async function sound() {
+        let index = 0
+        for (index = 1; index < temp.length + 1; index++) {
+            //  console.log(document.getElementById(index).innerHTML)
+            document.getElementById(temp[index - 1]).style.backgroundImage = "url(src/white.png)"
+            document.getElementById(temp[index - 1]).click()
+            console.log('f')
+
+            await p(800, true)
+            console.log('fw')
+            document.getElementById(temp[index - 1]).style.backgroundImage = `url(src/${document.getElementById(temp[index - 1]).innerText}.png)`
+
+        }
+        //  alert('wa')
+        store = true
+
+
+    }
+
+
+</script>
+
+</html>
