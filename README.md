@@ -1,2 +1,3 @@
 # Memory_Game
-Need to fixed some Bugs. i'll do it tommorow 
+I made a Memory game using HTML, CSS and vanilla javascript 
+# I'm also planing to add a leader board 👀 
