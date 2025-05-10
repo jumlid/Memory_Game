@@ -12,9 +12,21 @@
 
     </audio>
     <div class="container">
+        <div class="game_over">
+            <div class="status">
+                <h2>Game Over </h2>
+                <p>Score
+                <h1 id="score">0</h1>
+                </p>
+
+                <button id="restart" onclick="bot(2)"></button>
+            </div>
+        </div>
 
         <div class="game">
-            <h1>Score:<span id="score">0</span> Highest:<span id="hscore">0</span></h1>
+            <h1>Score:<span id="score">0</span> Highest:<span id="hscore">0</span> <button id="replay"
+                    onclick="sound()"></button></h1>
+
             <div class="first">
                 <button class="opt" style="background-image: url(src/red.png);" id="1">red</button>
                 <button class="opt" style="background-image: url(src/lime.png);" id="2">lime</button>
@@ -31,6 +43,61 @@
             * {
                 margin: 0;
                 padding: 0;
+            }
+
+            #restart {
+                margin-top: 10px;
+                border: none;
+                width: 40px;
+                height: 40px;
+                background-color: transparent;
+                background-image: url(src/restart.png);
+                background-position: center;
+                background-size: contain;
+                background-repeat: no-repeat;
+            }
+
+            p {
+                margin-top: 5px;
+                font-size: 20px;
+            }
+
+            #replay {
+                width: 30px;
+                height: 30px;
+                background-image: url(src/replay.png);
+
+                border-radius: 30px;
+                background-color: white;
+                background-position: center;
+                background-size: contain;
+            }
+
+            .game_over {
+                position: absolute;
+                height: 100vh;
+                border: 1px solid red;
+                width: 100vw;
+                display: none;
+                justify-content: center;
+                align-items: center;
+                backdrop-filter: blur(1px);
+                background-color: rgba(0, 0, 0, 0.253);
+            }
+
+            .status {
+                border: 1px solid white;
+                border-radius: 20px;
+                box-shadow: 1px 4px 5px 5px rgba(238, 238, 238, 0.205);
+                background-color: white;
+                width: 400px;
+                height: 400px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+
+
             }
 
             .container {
@@ -63,8 +130,11 @@
             button {
                 background-position: center;
                 background-size: contain;
+                background-repeat: no-repeat;
+                
                 font-weight: bold;
             }
+           
 
             button:active {
                 background-image: url(src/white.png) !important;
@@ -81,6 +151,23 @@
                 width: 50%;
                 cursor: pointer;
             }
+
+            @media (width <=490px) {
+                .game {
+                
+                  
+                    width:100%;
+                    height: fit-content;
+                   
+                    
+                    
+                }
+                .opt{
+                
+                    height: 200px;
+                }
+
+            }
         </style>
 
 </body>
@@ -94,46 +181,47 @@
     let state = false
     // let score = 4
     let users_input = 0
-    function p(time, promise) {
-        return new Promise((res, rej) => {
-            setTimeout(() => {
-                if (!promise) {
-                    rej()
+    function p(time) {
+        return new Promise(res =>
+            setTimeout(res, time)
+        )
 
-                }
-                else {
-                    res()
-                }
-            }, time)
-
-        })
-        //    setTimeout(r, time)
 
 
     }
 
     document.addEventListener('click', (e) => {
 
-        a.src = `src/${e.target.id}.mp3`
-        a.play()
+        if (e.target.className === "opt") {
+            a.src = `src/${e.target.id}.mp3`
+            a.play()
+        }
+
 
         if (store && e.isTrusted) {
 
 
             if (e.target.className === "opt") {
 
-                console.log(typeof (p))
-                console.log(typeof (e.target.id))
+                // console.log(typeof (p))
+                // console.log(typeof (e.target.id))
 
 
                 if (temp[users_input] === parseInt(e.target.id)) {
-                    console.log('yes')
+                    //  console.log('yes')
                     state = true
 
                 }
                 else {
-                    console.log("fuck")
+                    //   console.log("fuck")
                     state = false
+
+                    temp = []
+                    document.getElementById('score').innerText = point
+                    document.getElementsByClassName('game_over')[0].style.display = 'flex'
+                    point = 0
+                    //  alert('You lose')
+                    // bot(2)
                 }
 
 
@@ -142,30 +230,38 @@
                 users_input++
                 if (users_input >= temp.length && state) {
                     users_input = 0
+                    point += 2
+                    if (localStorage.getItem('hscore') < point || !localStorage.getItem('hscore')) {
+                        localStorage.setItem("hscore", point)
+                    }
+                    document.getElementById('hscore').innerText = localStorage.getItem('hscore')
                     // alert('next level')
-                    bot(point + 2)
+                    document.getElementById('score').innerText = point
+
+                    bot(point)
 
                 }
             }
             else {
-                console.log('wadwada')
+                //     console.log('wadwada')
             }
 
         }
     })
     async function bot(score) {
-        await p(0, false);
+        document.getElementsByClassName('game_over')[0].style.display = 'none'
+        document.getElementById('hscore').innerText = localStorage.getItem('hscore')
         for (let i = 0; i < score; i++) {
             temp.push(Math.floor(Math.random() * 4 + 1))
 
-            console.log(temp)
+            //   console.log(temp)
             //        const element = array[i];
 
         }
-        if (temp.length === score) {
-            sound()
 
-        }
+        sound()
+
+
     }
 
 
@@ -181,10 +277,10 @@
             //  console.log(document.getElementById(index).innerHTML)
             document.getElementById(temp[index - 1]).style.backgroundImage = "url(src/white.png)"
             document.getElementById(temp[index - 1]).click()
-            console.log('f')
+            //  console.log('f')
 
-            await p(800, true)
-            console.log('fw')
+            await p(400)
+            //   console.log('fw')
             document.getElementById(temp[index - 1]).style.backgroundImage = `url(src/${document.getElementById(temp[index - 1]).innerText}.png)`
 
         }
