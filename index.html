@@ -17,7 +17,7 @@
             <div class="status">
                 <h2>Game Over </h2>
                 <p>Score
-                <h1 id="score">0</h1>
+                <h1 id="gscore">0</h1>
                 </p>
 
                 <button id="restart" onclick="bot(2)"></button>
@@ -25,8 +25,7 @@
         </div>
 
         <div class="game">
-            <h1>Score:<span id="score">0</span> Highest:<span id="hscore">0</span> <button id="replay"
-                    onclick="sound()"></button></h1>
+            <h1>Score:<span id="score">0</span> Highest:<span id="hscore">0</span> <button id="play"></button></h1>
 
             <div class="first">
                 <button class="opt" style="background-image: url(src/red.png);" id="1">red</button>
@@ -44,6 +43,15 @@
             * {
                 margin: 0;
                 padding: 0;
+            }
+
+            #play {
+
+                width: 40px;
+                height: 40px;
+                background-image: url(src/play-button-arrowhead.png);
+                background-position: center;
+                background-size: 90%;
             }
 
             #restart {
@@ -132,10 +140,10 @@
                 background-position: center;
                 background-size: contain;
                 background-repeat: no-repeat;
-                
+
                 font-weight: bold;
             }
-           
+
 
             button:active {
                 background-image: url(src/white.png) !important;
@@ -155,16 +163,17 @@
 
             @media (width <=490px) {
                 .game {
-                
-                  
-                    width:100%;
+
+
+                    width: 100%;
                     height: fit-content;
-                   
-                    
-                    
+
+
+
                 }
-                .opt{
-                
+
+                .opt {
+
                     height: 200px;
                 }
 
@@ -180,6 +189,7 @@
     let point = 0
     let store = false
     let state = false
+    let def = 800
     // let score = 4
     let users_input = 0
     function p(time) {
@@ -192,6 +202,12 @@
     }
 
     document.addEventListener('click', (e) => {
+        if (e.target.id === "play") {
+            bot(point + 2)
+            document.getElementById('play').onclick = sound
+            document.getElementById('play').id = "replay"
+
+        }
 
         if (e.target.className === "opt") {
             a.src = `src/${e.target.id}.mp3`
@@ -218,9 +234,11 @@
                     state = false
 
                     temp = []
-                    document.getElementById('score').innerText = point
+                    document.getElementById('gscore').innerText = point
+                    document.getElementById('score').innerText = 0
                     document.getElementsByClassName('game_over')[0].style.display = 'flex'
                     point = 0
+                    users_input = 0
                     //  alert('You lose')
                     // bot(2)
                 }
@@ -232,14 +250,23 @@
                 if (users_input >= temp.length && state) {
                     users_input = 0
                     point += 2
-                    if (localStorage.getItem('hscore') < point || !localStorage.getItem('hscore')) {
-                        localStorage.setItem("hscore", point)
+                    if (def > 500) {
+                        def -= 10
                     }
-                    document.getElementById('hscore').innerText = localStorage.getItem('hscore')
-                    // alert('next level')
-                    document.getElementById('score').innerText = point
+                    setTimeout(() => {
+                        if (localStorage.getItem('hscore') < point || !localStorage.getItem('hscore')) {
+                            localStorage.setItem("hscore", point)
+                        }
+                        document.getElementById('hscore').innerText = localStorage.getItem('hscore')
+                        //  alert('next level')
 
-                    bot(point)
+                        document.getElementById('score').innerText = point
+
+                        bot(point)
+
+                    }, 500)
+
+
 
                 }
             }
@@ -268,21 +295,25 @@
 
 
 
-    bot(point + 2)
+    //  bot(point + 2)
 
 
 
     async function sound() {
         let index = 0
+        users_input = 0
         for (index = 1; index < temp.length + 1; index++) {
             //  console.log(document.getElementById(index).innerHTML)
             document.getElementById(temp[index - 1]).style.backgroundImage = "url(src/white.png)"
             document.getElementById(temp[index - 1]).click()
             //  console.log('f')
+            setTimeout(() => {
+                document.getElementById(temp[index - 1]).style.backgroundImage = `url(src/${document.getElementById(temp[index - 1]).innerText}.png)`
+            }, 200)
 
-            await p(400)
+            await p(def)
             //   console.log('fw')
-            document.getElementById(temp[index - 1]).style.backgroundImage = `url(src/${document.getElementById(temp[index - 1]).innerText}.png)`
+
 
         }
         //  alert('wa')
