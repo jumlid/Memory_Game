@@ -23,19 +23,23 @@
                 <button id="restart" onclick="bot(2)"></button>
             </div>
         </div>
+        <div class="top">
 
+            <h1>Score:<span id="score"> 0</span> </h1>
+            <h1>Highest:<span id="hscore"> 0</span> </h1>
+            <button id="play"></button>
+
+        </div>
         <div class="game">
-            <h1>Score:<span id="score">0</span> Highest:<span id="hscore">0</span> <button id="play"></button></h1>
+
 
             <div class="first">
-                <button class="opt" style="background-image: url(src/red.png);" id="1">red</button>
-                <button class="opt" style="background-image: url(src/lime.png);" id="2">lime</button>
+                <button class="opt" style="background-image: url(src/Red.png);" id="1">Red</button>
+                <button class="opt" style="background-image: url(src/Lime.png);" id="2">Lime</button>
             </div>
             <div class="second">
-                <button class="opt" style="background-image: url(src/cyan.png);" id="3">cyan</button>
-                <button class="opt" style="background-image: url(src/yellow.png);" id="4">yellow</button </div>
-
-
+                <button class="opt" style="background-image: url(src/Cyan.png);" id="3">Cyan</button>
+                <button class="opt" style="background-image: url(src/Yellow.png);" id="4">Yellow</button </div>
             </div>
 
         </div>
@@ -46,25 +50,32 @@
             }
 
             #play {
-
-                width: 40px;
-                height: 40px;
+                border: none;
+                width: 30px;
+                height: 30px;
                 background-image: url(src/play-button-arrowhead.png);
+                background-color: transparent;
                 background-position: center;
                 background-size: 90%;
             }
 
-            #restart {
-                margin-top: 10px;
-                border: none;
-                width: 40px;
-                height: 40px;
-                background-color: transparent;
-                background-image: url(src/restart.png);
-                background-position: center;
-                background-size: contain;
-                background-repeat: no-repeat;
+            .top {
+
+                display: flex;
+                width: fit-content;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                padding-bottom: 10px;
             }
+
+            h1 {
+                margin-right: 10px;
+                color: #dce0e8;
+            }
+
+
+
 
             p {
                 margin-top: 5px;
@@ -72,12 +83,13 @@
             }
 
             #replay {
+                border: none;
                 width: 30px;
                 height: 30px;
                 background-image: url(src/replay.png);
 
                 border-radius: 30px;
-                background-color: white;
+                background-color: transparent;
                 background-position: center;
                 background-size: contain;
             }
@@ -85,7 +97,7 @@
             .game_over {
                 position: absolute;
                 height: 100vh;
-                border: 1px solid red;
+
                 width: 100vw;
                 display: none;
                 justify-content: center;
@@ -95,7 +107,7 @@
             }
 
             .status {
-                border: 1px solid white;
+
                 border-radius: 20px;
                 box-shadow: 1px 4px 5px 5px rgba(238, 238, 238, 0.205);
                 background-color: white;
@@ -110,21 +122,28 @@
             }
 
             .container {
-                background-color: rgb(221, 216, 206);
+                background-color: rgb(17, 17, 27);
                 text-align: center;
                 height: 100vh;
                 width: 100vw;
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                flex-direction: column;
             }
 
             .game {
 
+                padding: 20px;
                 width: 600px;
                 height: 600px;
                 display: flex;
                 flex-direction: column;
+                background-color: #181926;
+                border-radius: 30px;
+
+
+
             }
 
 
@@ -134,12 +153,14 @@
                 height: 50%;
                 width: 100%;
                 display: flex;
+
             }
 
             button {
                 background-position: center;
                 background-size: contain;
                 background-repeat: no-repeat;
+
 
                 font-weight: bold;
             }
@@ -152,6 +173,7 @@
             .second {
                 display: flex;
                 height: 50%;
+
             }
 
             .game button {
@@ -159,7 +181,26 @@
                 border: none;
                 width: 50%;
                 cursor: pointer;
+                font-size: 20px;
+                background-color: transparent;
+                background-size: cover;
+
             }
+
+            #restart {
+                margin-top: 10px;
+                border: none;
+                width: 40px;
+                height: 40px;
+
+                background-image: url(src/restart.png);
+                background-position: center;
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-color: transparent;
+            }
+
+
 
             @media (width <=490px) {
                 .game {
@@ -190,7 +231,7 @@
     let store = false
     let state = false
     let def = 800
-    // let score = 4
+    let score
     let users_input = 0
     function p(time) {
         return new Promise(res =>
@@ -203,6 +244,7 @@
 
     document.addEventListener('click', (e) => {
         if (e.target.id === "play") {
+            ///console.log('e')
             bot(point + 2)
             document.getElementById('play').onclick = sound
             document.getElementById('play').id = "replay"
@@ -220,17 +262,17 @@
 
             if (e.target.className === "opt") {
 
-                // console.log(typeof (p))
-                // console.log(typeof (e.target.id))
+                // ///console.log(typeof (p))
+                // ///console.log(typeof (e.target.id))
 
 
                 if (temp[users_input] === parseInt(e.target.id)) {
-                    //  console.log('yes')
+                    //  ///console.log('yes')
                     state = true
 
                 }
                 else {
-                    //   console.log("fuck")
+                    //   ///console.log("fuck")
                     state = false
 
                     temp = []
@@ -245,7 +287,7 @@
 
 
 
-                //   console.log('es')
+                //   ///console.log('es')
                 users_input++
                 if (users_input >= temp.length && state) {
                     users_input = 0
@@ -261,6 +303,8 @@
                         //  alert('next level')
 
                         document.getElementById('score').innerText = point
+                        ///console.log(point)
+
 
                         bot(point)
 
@@ -271,7 +315,7 @@
                 }
             }
             else {
-                //     console.log('wadwada')
+                //     ///console.log('wadwada')
             }
 
         }
@@ -282,10 +326,12 @@
         for (let i = 0; i < score; i++) {
             temp.push(Math.floor(Math.random() * 4 + 1))
 
-            //   console.log(temp)
+            ///console.log(temp)
             //        const element = array[i];
 
         }
+        score++
+        ///console.log('score', score)
 
         sound()
 
@@ -303,16 +349,16 @@
         let index = 0
         users_input = 0
         for (index = 1; index < temp.length + 1; index++) {
-            //  console.log(document.getElementById(index).innerHTML)
-            document.getElementById(temp[index - 1]).style.backgroundImage = "url(src/white.png)"
+            //  ///console.log(document.getElementById(index).innerHTML)
+            document.getElementById(temp[index - 1]).style.backgroundImage = "url(src/White.png)"
             document.getElementById(temp[index - 1]).click()
-            //  console.log('f')
+            //  ///console.log('f')
             setTimeout(() => {
                 document.getElementById(temp[index - 1]).style.backgroundImage = `url(src/${document.getElementById(temp[index - 1]).innerText}.png)`
             }, 200)
 
             await p(def)
-            //   console.log('fw')
+            //   ///console.log('fw')
 
 
         }
